@@ -5,7 +5,7 @@
 <link rel="icon" href="https://cdn.jsdmirror.com/gh/MitteWolf/kirby/icon.png" type="image/png">
 <link rel="apple-touch-icon" href="https://cdn.jsdmirror.com/gh/MitteWolf/kirby/icon.png">
 <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
-<title>卡比の梦幻世界</title>
+<title>卡比de梦幻世界</title>
 <style>
 /* 全局样式 + 背景 */
 * {
@@ -16,9 +16,9 @@
 body {
     background-image: url('https://cdn.jsdmirror.com/gh/MitteWolf/kirby/bg.jpg');
     background-attachment: fixed;
-    background-repeat: no-repeat;          /* 改为不重复 */
-    background-size: cover;               /* 背景图覆盖整个屏幕，保持比例 */
-    background-position: center center;   /* 居中显示 */
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center center;
     font-family: "VT323", "宋体", monospace;
     cursor: url('https://cdn.jsdmirror.com/gh/MitteWolf/kirby/click.png'), auto;
     min-height: 100vh;
@@ -329,94 +329,40 @@ body {
     }
 }
 
-/* ===== 主页面样式（神殿风格，保持透明度） ===== */
-.header-bg {
-    background-color: #ff88cc;
-}
-.header-bg td {
-    height: 80px;
-    text-align: center;
-}
-.header-title {
-    color: #FFFFFF;
-    font-size: 28px;
-    font-family: "VT323", "宋体", sans-serif;
-    font-weight: bold;
-    text-shadow: 2px 2px 0 #8b0044;
-}
-.header-sub {
-    color: #FFDDE1;
-    font-size: 13px;
-}
-.nav-bg {
-    background-color: #ffd6e8;
-}
-.nav-bg td {
-    height: 30px;
-}
-.nav-link {
-    color: #cc0066;
-    text-decoration: none;
-    font-weight: bold;
-    font-size: 15px;
-}
-.nav-link:hover {
-    color: #ff33cc;
-    text-decoration: underline;
-}
-.nav-sep {
-    background-color: #ff4faa;
-    width: 2%;
-}
-.marquee-bg {
-    background-color: #ffe3f2;
-}
-.marquee-bg td {
-    height: 26px;
-}
-.marquee-text {
-    color: #cc0066;
-    font-size: 14px;
-}
+/* ===== 主页面样式 ===== */
 .main-content {
     background-color: #ffd6e8;
     width: 70%;
     padding: 20px 15px;
     vertical-align: top;
 }
-.sidebar {
-    background-color: #ffe3f2;
-    width: 30%;
-    padding: 10px;
-    vertical-align: top;
-}
-.footer-bg {
-    background-color: #ff88cc;
-}
-.footer-bg td {
-    padding: 8px;
-    text-align: center;
-}
-.footer-text {
-    color: #FFDDE1;
-    font-size: 13px;
-    text-shadow: 1px 1px #8b0044;
-}
-.footer-small {
-    color: #FFB6C9;
-    font-size: 11px;
-}
-.footer-link {
-    color: #FFDDE1;
-}
-.footer-link:hover {
-    color: #FFFFFF;
-}
 table {
     border-collapse: collapse;
 }
 a {
     text-decoration: none;
+}
+
+/* ===== 导航栏 - 放大点击区域 ===== */
+.nav-link-block {
+    display: block;
+    padding: 8px 20px;
+    color: #cc0066;
+    font-weight: bold;
+    font-size: 15px;
+    text-decoration: none;
+    width: 100%;
+    height: 100%;
+    transition: background 0.15s;
+}
+.nav-link-block:hover {
+    background: rgba(255, 255, 255, 0.3);
+    color: #ff33cc;
+    text-decoration: underline;
+}
+.nav-td {
+    padding: 0;
+    text-align: center;
 }
 
 /* 卡比自我介绍 + 右侧图片 容器 */
@@ -478,13 +424,327 @@ a {
 .kirby-side-img img:hover {
     transform: scale(1.02);
 }
+
+/* 竖屏时图片移到介绍上方 */
 @media (max-width: 600px) {
     .intro-wrapper {
-        flex-direction: column;
+        flex-direction: column-reverse;
         align-items: center;
     }
     .kirby-side-img {
         max-width: 160px;
+    }
+}
+
+/* 了解更多框架 */
+.know-more-frame {
+    margin-top: 28px;
+    padding: 16px 20px 18px 20px;
+    background: rgba(255, 240, 245, 0.75);
+    backdrop-filter: blur(1px);
+    border: 2px solid #ffb0c8;
+    border-radius: 28px 6px 28px 6px;
+    box-shadow: 0 4px 14px rgba(216, 112, 147, 0.15);
+    transition: all 0.2s;
+}
+.know-more-frame:hover {
+    background: rgba(255, 240, 245, 0.9);
+    box-shadow: 0 6px 20px rgba(216, 112, 147, 0.25);
+}
+.know-more-title {
+    font-size: 18px;
+    font-weight: bold;
+    color: #8B3A4A;
+    letter-spacing: 1px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.know-more-title::before {
+    content: "✦";
+    color: #D87093;
+    font-size: 22px;
+}
+.know-more-title::after {
+    content: "✦";
+    color: #D87093;
+    font-size: 22px;
+}
+.know-more-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px 22px;
+    padding-left: 4px;
+}
+.km-link {
+    font-size: 16px;
+    color: #A05060;
+    background: rgba(255, 255, 255, 0.5);
+    padding: 4px 14px 4px 12px;
+    border-radius: 40px;
+    border: 1px solid #ffb0c8;
+    transition: all 0.15s;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: bold;
+    text-decoration: none;
+}
+.km-link:hover {
+    background: #ffd6e8;
+    color: #8B3A4A;
+    border-color: #D87093;
+    box-shadow: 0 2px 8px rgba(216, 112, 147, 0.3);
+    transform: translateY(-1px);
+}
+.km-link::before {
+    content: "⋆";
+    color: #D87093;
+    font-size: 14px;
+}
+@media (max-width: 600px) {
+    .know-more-frame {
+        padding: 12px 14px;
+    }
+    .know-more-title {
+        font-size: 15px;
+    }
+    .km-link {
+        font-size: 14px;
+        padding: 3px 10px 3px 8px;
+    }
+}
+
+/* ================================================================
+   ★★★ 相册样式 - 两张不同图片叠放 ★★★
+   ================================================================ */
+.album-container {
+    background: rgba(255, 240, 245, 0.1);
+    backdrop-filter: blur(0px);
+    border: 2px solid #ffb0c8;
+    border-radius: 28px 6px 28px 6px;
+    padding: 20px 20px 16px;
+    margin-top: 0px;
+    box-shadow: 0 4px 14px rgba(216, 112, 147, 0.15);
+    transition: all 0.2s;
+}
+.album-container:hover {
+    background: rgba(255, 240, 245, 0.9);
+    box-shadow: 0 6px 20px rgba(216, 112, 147, 0.25);
+}
+.album-title {
+    font-size: 18px;
+    font-weight: bold;
+    color: #8B3A4A;
+    letter-spacing: 1px;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    justify-content: center;
+}
+.album-title::before {
+    content: "📷";
+    font-size: 22px;
+}
+.album-title::after {
+    content: "📷";
+    font-size: 22px;
+}
+
+/* 相册网格 - 每个相框是一个容器 */
+.album-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 30px 40px;
+    position: relative;
+    z-index: 1;
+}
+
+/* 每个相框容器 - 固定尺寸，两张照片叠放 */
+.album-frame {
+    flex: 0 0 auto;
+    width: 260px;
+    height: 320px;
+    position: relative;
+}
+
+/* 拍立得照片样式 */
+.album-polaroid {
+    position: absolute;
+    width: 82%;
+    max-width: 220px;
+    background: #f5ede4;
+    padding: 10px 10px 14px 10px;
+    border-radius: 4px;
+    box-shadow: 0 12px 30px rgba(80,50,30,0.25), 0 4px 12px rgba(60,40,20,0.15);
+    transition: transform 0.35s cubic-bezier(0.2, 0.9, 0.3, 1.3), box-shadow 0.35s ease, z-index 0s;
+    cursor: pointer;
+    will-change: transform, z-index;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border: 1px solid #ded3c4;
+}
+.album-polaroid img {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    border-radius: 3px;
+    display: block;
+    filter: none
+    background: #d4c8b8;
+    border: 1px solid #d0c0ae;
+}
+
+/* 叠放倾斜效果 */
+/* 奇数相框：左上左倾 + 右下右倾 */
+.album-frame:nth-child(odd) .album-polaroid-left {
+    top: 2%;
+    left: -4%;
+    transform: rotate(-7deg) translate(2%, -2%);
+    z-index: 2;
+}
+.album-frame:nth-child(odd) .album-polaroid-right {
+    bottom: 2%;
+    right: -4%;
+    transform: rotate(7deg) translate(-2%, 4%);
+    z-index: 1;
+}
+
+/* 偶数相框：倾斜方向互换 */
+.album-frame:nth-child(even) .album-polaroid-left {
+    top: 2%;
+    left: -4%;
+    transform: rotate(7deg) translate(2%, -2%);
+    z-index: 2;
+}
+.album-frame:nth-child(even) .album-polaroid-right {
+    bottom: 2%;
+    right: -4%;
+    transform: rotate(-7deg) translate(-2%, 4%);
+    z-index: 1;
+}
+
+/* 鼠标悬停置顶放大 */
+.album-polaroid:hover {
+    z-index: 10 !important;
+    transform: scale(1.05) translateY(-8px) !important;
+    box-shadow: 0 32px 64px rgba(60,35,15,0.35), 0 8px 24px rgba(50,30,10,0.2);
+}
+
+/* 小屏适配 */
+@media (max-width: 700px) {
+    .album-frame {
+        width: 200px;
+        height: 260px;
+    }
+    .album-polaroid {
+        padding: 8px 8px 10px 8px;
+    }
+}
+
+/* 其他页面占位样式 */
+.other-placeholder {
+    background: rgba(255,240,245,0.75);
+    border: 2px dashed #D87093;
+    border-radius: 20px 4px 20px 4px;
+    padding: 30px 25px;
+    text-align: center;
+    backdrop-filter: blur(1px);
+}
+.other-placeholder p:first-child {
+    font-size: 24px;
+    color: #8B3A4A;
+}
+.other-placeholder p:nth-child(2) {
+    font-size: 16px;
+    color: #A05060;
+    margin-top: 10px;
+}
+.other-placeholder p:last-child {
+    font-size: 14px;
+    color: #B06A7A;
+    margin-top: 8px;
+}
+
+/* ================================================================
+   ★★★ 马赛克粒子拖尾效果 ★★★
+   ================================================================ */
+.particle-canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 9997;
+}
+
+/* ================================================================
+   ★★★ 复古亮粉色肥皂形状「回到顶部」按钮 ★★★
+   ================================================================ */
+#soap-top-btn {
+    position: fixed;
+    bottom: 80px;
+    right: 20px;
+    z-index: 9996;
+    background: radial-gradient(circle at 30% 30%, #ffb3d9, #ff66aa);
+    color: #fff;
+    font-family: "VT323", monospace;
+    font-size: 14px;
+    font-weight: bold;
+    padding: 10px 18px;
+    border: 3px solid #fff0f5;
+    border-radius: 50px 50px 50px 10px;
+    box-shadow: 0 8px 0 #cc3377, 0 10px 20px rgba(255, 80, 150, 0.4);
+    cursor: pointer;
+    transition: all 0.1s ease;
+    text-shadow: 0 2px 0 #aa3366;
+    letter-spacing: 1px;
+    display: none;  /* 默认隐藏，滚动时显示 */
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(2px);
+    border: 2px solid #ffe0f0;
+}
+}
+#soap-top-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 0 #cc3377, 0 16px 30px rgba(255, 80, 150, 0.5);
+}
+#soap-top-btn:active {
+    transform: translateY(4px);
+    box-shadow: 0 4px 0 #cc3377, 0 10px 20px rgba(255, 80, 150, 0.3);
+}
+@media (max-width: 480px) {
+    #soap-top-btn {
+        bottom: 70px;
+        right: 12px;
+        padding: 8px 14px;
+        font-size: 12px;
+        border-radius: 40px 40px 40px 8px;
+    }
+    #soap-top-btn::before {
+        font-size: 14px;
+        margin-right: 4px;
+    }
+}
+
+/* 底部版权区域 - 竖屏时增加下边距，避免被播放器遮挡 */
+.footer-copyright {
+    padding-bottom: 20px;
+}
+@media (max-width: 768px) {
+    .footer-copyright {
+        padding-bottom: 70px;  /* 给播放器留出空间 */
+    }
+}
+@media (max-width: 480px) {
+    .footer-copyright {
+        padding-bottom: 80px;
     }
 }
 </style>
@@ -494,13 +754,16 @@ a {
 <!-- ===== 欢迎遮罩层 ===== -->
 <div id="welcome-overlay">
     <div class="welcome-box">
-        <h1>poyo~</h1>
-        <p>这里是卡比の梦幻世界</p>
+        <h1>poyo</h1>
+        <p>这里是卡比de梦幻世界</p>
         <div class="hint">
             <span>✦ 点击网页任意处继续 ✦</span>
         </div>
     </div>
 </div>
+
+<!-- ===== 马赛克粒子画布 ===== -->
+<canvas id="particleCanvas" class="particle-canvas"></canvas>
 
 <!-- ===== 复古播放器 (固定右下角) ===== -->
 <div id="retro-player">
@@ -527,8 +790,11 @@ a {
     </div>
 </div>
 
+<!-- ===== 复古亮粉色肥皂形状「回到顶部」按钮 ===== -->
+<button id="soap-top-btn" title="回到顶部">回到顶部</button>
+
 <!-- ===== 主页面 ===== -->
-<table class="main-table" width="100%" border="0" align="center" cellpadding="0" cellspacing="0" bgcolor="#FFF0F5" style="opacity:0.92;">
+<table width="100%" border="0" align="center" cellpadding="0" cellspacing="0" bgcolor="#FFF0F5" style="opacity:0.92;">
 <tr>
 <td>
 
@@ -540,19 +806,25 @@ a {
             <b>Hi☆</b>
         </font>
         <br>
-        <font color="#FFDDE1" size="2">—— 这里是卡比の梦幻世界 ——</font>
+        <font color="#FFDDE1" size="2">—— 这里是卡比de梦幻世界 ——</font>
     </td>
 </tr>
 </table>
 
-<!-- ===== 导航栏 (删除了 日志、留言板、关于，添加了“其他”) ===== -->
+<!-- ===== 导航栏 ===== -->
 <table width="100%" border="0" cellpadding="0" cellspacing="0" bgcolor="#FFD9E6">
 <tr align="center">
-    <td height="30" width="20%"><b><a href="#" style="color:#cc0066;">首页</a></b></td>
+    <td class="nav-td" width="20%" bgcolor="#FFD9E6">
+        <a href="#" class="nav-link-block" id="nav-home">首页</a>
+    </td>
     <td width="2%" bgcolor="#ff4faa">|</td>
-    <td width="20%"><a href="#" style="color:#cc0066;">相册</a></td>
+    <td class="nav-td" width="20%" bgcolor="#FFD9E6">
+        <a href="#" class="nav-link-block" id="nav-album">相册</a>
+    </td>
     <td width="2%" bgcolor="#ff4faa">|</td>
-    <td width="20%"><a href="#" style="color:#cc0066;">其他</a></td>
+    <td class="nav-td" width="20%" bgcolor="#FFD9E6">
+        <a href="#" class="nav-link-block" id="nav-other">其他</a>
+    </td>
 </tr>
 </table>
 
@@ -561,7 +833,7 @@ a {
 <tr>
     <td height="26">
         <marquee scrollamount="3" behavior="scroll" onmouseover="this.stop()" onmouseout="this.start()">
-            <font color="#cc0066" size="2">poyo☆来这休息几分钟再走吧。不要害怕，卡比会在这陪你❤</font>
+            <font color="#cc0066" size="2">poyo☆来这休息几分钟再走吧。不要怕，卡比会在这陪着你❤</font>
         </marquee>
     </td>
 </tr>
@@ -570,20 +842,53 @@ a {
 <!-- ===== 主体两栏 ===== -->
 <table width="100%" border="0" cellpadding="10" cellspacing="0">
 <tr valign="top">
-    <td width="70%" bgcolor="#ffd6e8" class="main-content">
-        <!-- 来自卡比的介绍 + 右侧图片 (flex容器) -->
-        <div class="intro-wrapper">
-            <div class="kirby-intro">
-                <div class="poyo">来自卡比的介绍</div>
-                <p><strong>poyo✨我是卡比！</strong></p>
-                <p>我是住在<strong>波普星✨（Pop Star）</strong>上<strong>噗噗噗之国（Dream Land）</strong>的粉色小家伙，身高大约20厘米。虽然看起来圆滚滚的，但我可是这片星球的<strong>守护者</strong>哦！</p>
-                <p>我的招牌能力是<strong>吸入</strong>：可以把敌人或物品整个吸进嘴里，然后通过<strong>复制能力</strong>获得他们的力量——从喷火、挥剑到射针、变伞，我能用超过<strong>30种</strong>不同的能力战斗。而且我还能吸满空气，像气球一样飘起来飞行！</p>
-                <div class="quote">“可怕的梦，让我们吃掉它吧。”</div>
-                <p>我最大的爱好就是<strong>吃</strong>——尤其是草莓小蛋糕、番茄和西瓜！吃饱了就喜欢睡个长长的午觉。虽然有时候会被敌人叫做“粉红恶魔”，但我永远是噗噗噗之国最可靠的伙伴。只要有人需要帮助，我一定会赶过去！</p>
-                <p style="font-size:14px; color:#8B3A4A; margin-top:8px;">—— 随时欢迎你来波普星玩，poyo！✨</p>
+    <td width="70%" bgcolor="#ffd6e8" class="main-content" id="main-content">
+        <!-- 首页内容（默认显示） -->
+        <div id="page-home">
+            <div class="intro-wrapper">
+                <div class="kirby-intro">
+                    <div class="poyo">来自卡比的介绍</div>
+                    <p><strong>poyo✨我是卡比！</strong></p>
+                    <p>我是住在<strong>波普星✨（Pop Star）</strong>上<strong>噗噗噗之国（Dream Land）</strong>的粉色小家伙，身高大约20厘米。虽然看起来圆滚滚的，但我可是这片星球的<strong>守护者</strong>哦！</p>
+                    <p>我的招牌能力是<strong>吸入</strong>：可以把敌人或物品整个吸进嘴里，然后通过<strong>复制能力</strong>获得他们的力量——从喷火、挥剑到射针、变伞，我能用超过<strong>30种</strong>不同的能力战斗。而且我还能吸满空气，像气球一样飘起来飞行！</p>
+                    <div class="quote">“可怕的梦，让我们吃掉它吧。”</div>
+                    <p>我最大的爱好就是<strong>吃</strong>——尤其是草莓小蛋糕、番茄和西瓜！吃饱了就喜欢睡个长长的午觉。虽然有时候会被敌人叫做“粉红恶魔”，但我永远是噗噗噗之国最可靠的伙伴。只要有人需要帮助，我一定会赶过去！</p>
+                    <p style="font-size:14px; color:#8B3A4A; margin-top:8px;">—— 随时欢迎你来波普星玩，poyo！✨</p>
+                </div>
+                <div class="kirby-side-img">
+                    <img src="https://cdn.jsdmirror.com/gh/MitteWolf/kirby/kirby.jpg" alt="卡比插图" loading="lazy">
+                </div>
             </div>
-            <div class="kirby-side-img">
-                <img src="https://cdn.jsdmirror.com/gh/MitteWolf/kirby/kirby.jpg" alt="卡比插图" loading="lazy">
+
+            <div class="know-more-frame">
+                <div class="know-more-title">如果你想了解我更多的故事，来这里</div>
+                <div class="know-more-links">
+                    <a href="https://kirby.jp" target="_blank" rel="noopener" class="km-link">官网 kirby.jp</a>
+                    <a href="https://twitter.com/kirby_JP" target="_blank" rel="noopener" class="km-link">官推 twitter.com/kirby_JP</a>
+                    <a href="https://wikirby.com" target="_blank" rel="noopener" class="km-link">wiki wikirby.com</a>
+                    <a href="https://wiki.biligame.com/kirby" target="_blank" rel="noopener" class="km-link">中文wiki wiki.biligame.com/kirby</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- 相册页面（默认隐藏） -->
+        <div id="page-album" style="display:none;">
+            <div class="album-container">
+                <div class="album-title">卡比de足迹</div>
+                <div class="album-grid" id="albumGrid">
+                    <!-- JavaScript 动态生成 -->
+                </div>
+            </div>
+        </div>
+
+        <!-- 其他页面（默认隐藏） -->
+        <div id="page-other" style="display:none;">
+            <div class="other-placeholder">
+                <div style="margin-top: 20px; padding: 15px; background: rgba(255,255,255,0.6); border-radius: 30px 6px 30px 6px; border: 2px solid #ffb0c8;">
+                    <p style="font-size: 20px; color: #8B3A4A; font-weight: bold;">📅 本站更新于 2026 年</p>
+                    <p style="font-size: 16px; color: #A05060; margin: 8px 0;">✨ 如果你想来我de小空间，看这里：</p>
+                    <a href="https://mittewolf.pages.dev/" target="_blank" rel="noopener" style="display: inline-block; background: #D87093; color: #fff; padding: 8px 24px; border-radius: 60px; text-decoration: none; font-weight: bold; font-size: 18px; box-shadow: 0 4px 8px rgba(216,112,147,0.3); transition: 0.2s;">🚀 MTの小空间</a>
+                </div>
             </div>
         </div>
         &nbsp;
@@ -594,13 +899,12 @@ a {
 <!-- ===== 底部 ===== -->
 <table width="100%" border="0" cellpadding="8" cellspacing="0" bgcolor="#D87093">
 <tr>
-    <td align="center">
-        <font color="#FFDDE1" size="2">
-            Copyright © 2009 MT的个人主页 &nbsp;|&nbsp; 
-            <a href="#"><font color="#FFDDE1">回到顶部</font></a>
-            <br>
-        </font>
-    </td>
+<td align="center" class="footer-copyright">
+    <font color="#FFDDE1" size="2">
+        Copyright © 2009 MT的个人主页
+        <br>
+    </font>
+</td>
 </tr>
 </table>
 
@@ -622,6 +926,177 @@ a {
 
 <script>
 (function() {
+    // ================================================================
+    // ★★★ 马赛克粒子拖尾效果 ★★★
+    // ================================================================
+    const canvas = document.getElementById('particleCanvas');
+    const ctx = canvas.getContext('2d');
+    let width, height;
+    
+    // 粒子数组
+    let particles = [];
+    const MAX_PARTICLES = 40;
+    const PARTICLE_SIZE = 6; // 马赛克方块大小
+    
+    // 鼠标位置
+    let mouseX = -1000;
+    let mouseY = -1000;
+    let isMouseMoving = false;
+    let mouseTimer = null;
+    
+    function resizeCanvas() {
+        width = window.innerWidth;
+        height = window.innerHeight;
+        canvas.width = width;
+        canvas.height = height;
+    }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+    
+    // 生成黄色调马赛克颜色
+    function getYellowColor() {
+        // 黄色系：从淡黄到橙黄
+        const r = 220 + Math.floor(Math.random() * 35);
+        const g = 180 + Math.floor(Math.random() * 50);
+        const b = 50 + Math.floor(Math.random() * 60);
+        return { r, g, b };
+    }
+    
+    // 粒子类
+    class Particle {
+        constructor(x, y) {
+            this.x = x;
+            this.y = y;
+            const color = getYellowColor();
+            this.r = color.r;
+            this.g = color.g;
+            this.b = color.b;
+            this.size = PARTICLE_SIZE * (0.5 + Math.random() * 0.8);
+            this.life = 1.0;
+            this.decay = 0.008 + Math.random() * 0.015;
+            this.vx = (Math.random() - 0.5) * 1.2;
+            this.vy = (Math.random() - 0.5) * 1.2 - 0.5;
+            this.rotation = Math.random() * Math.PI * 2;
+            this.rotSpeed = (Math.random() - 0.5) * 0.05;
+        }
+        
+        update() {
+            this.x += this.vx;
+            this.y += this.vy;
+            this.vy += 0.02; // 微微下沉
+            this.life -= this.decay;
+            this.rotation += this.rotSpeed;
+            // 随机飘散
+            this.vx += (Math.random() - 0.5) * 0.08;
+            this.vy += (Math.random() - 0.5) * 0.08;
+            // 速度限制
+            const maxV = 1.5;
+            const speed = Math.sqrt(this.vx * this.vx + this.vy * this.vy);
+            if (speed > maxV) {
+                this.vx = (this.vx / speed) * maxV;
+                this.vy = (this.vy / speed) * maxV;
+            }
+        }
+        
+        draw(ctx) {
+            const alpha = Math.max(0, this.life * 0.85);
+            ctx.save();
+            ctx.globalAlpha = alpha;
+            ctx.translate(this.x, this.y);
+            ctx.rotate(this.rotation);
+            
+            // 马赛克方块 - 带轻微立体感
+            const s = this.size;
+            // 主色块
+            ctx.fillStyle = `rgb(${this.r}, ${this.g}, ${this.b})`;
+            ctx.fillRect(-s/2, -s/2, s, s);
+            
+            // 边框（加深黄色）
+            ctx.strokeStyle = `rgba(200, 160, 50, ${alpha * 0.5})`;
+            ctx.lineWidth = 1;
+            ctx.strokeRect(-s/2, -s/2, s, s);
+            
+            // 高光（左上角小亮点）
+            ctx.fillStyle = `rgba(255, 255, 230, ${alpha * 0.3})`;
+            ctx.fillRect(-s/2 + 1, -s/2 + 1, s/3, s/3);
+            
+            ctx.restore();
+        }
+        
+        isDead() {
+            return this.life <= 0;
+        }
+    }
+    
+    // 添加粒子
+    function addParticles(x, y, count) {
+        for (let i = 0; i < count; i++) {
+            if (particles.length >= MAX_PARTICLES) {
+                particles.shift();
+            }
+            // 在鼠标周围随机偏移
+            const offsetX = (Math.random() - 0.5) * 20;
+            const offsetY = (Math.random() - 0.5) * 20;
+            particles.push(new Particle(x + offsetX, y + offsetY));
+        }
+    }
+    
+    // 鼠标移动事件
+    document.addEventListener('mousemove', function(e) {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+        isMouseMoving = true;
+        
+        // 每次移动生成2-4个粒子
+        const count = 2 + Math.floor(Math.random() * 3);
+        addParticles(mouseX, mouseY, count);
+        
+        // 清除移动状态计时器
+        clearTimeout(mouseTimer);
+        mouseTimer = setTimeout(function() {
+            isMouseMoving = false;
+        }, 100);
+    });
+    
+    // 触摸移动（移动端支持）
+    document.addEventListener('touchmove', function(e) {
+        const touch = e.touches[0];
+        if (touch) {
+            mouseX = touch.clientX;
+            mouseY = touch.clientY;
+            isMouseMoving = true;
+            addParticles(mouseX, mouseY, 3);
+            
+            clearTimeout(mouseTimer);
+            mouseTimer = setTimeout(function() {
+                isMouseMoving = false;
+            }, 100);
+        }
+    }, { passive: true });
+    
+    // 动画循环
+    function animateParticles() {
+        ctx.clearRect(0, 0, width, height);
+        
+        // 更新并绘制所有粒子
+        for (let i = particles.length - 1; i >= 0; i--) {
+            const p = particles[i];
+            p.update();
+            p.draw(ctx);
+            if (p.isDead()) {
+                particles.splice(i, 1);
+            }
+        }
+        
+        // 如果鼠标在移动但粒子太少，补充一些
+        if (isMouseMoving && particles.length < MAX_PARTICLES * 0.3) {
+            addParticles(mouseX + (Math.random() - 0.5) * 30, mouseY + (Math.random() - 0.5) * 30, 2);
+        }
+        
+        requestAnimationFrame(animateParticles);
+    }
+    animateParticles();
+
     // ----- DOM 引用 -----
     const overlay = document.getElementById('welcome-overlay');
     const player = document.getElementById('retro-player');
@@ -638,29 +1113,155 @@ a {
     const volumeKnob = document.getElementById('volume-knob');
     const volLabel = document.getElementById('vol-label');
 
+    // 导航元素
+    const navHome = document.getElementById('nav-home');
+    const navAlbum = document.getElementById('nav-album');
+    const navOther = document.getElementById('nav-other');
+    const pageHome = document.getElementById('page-home');
+    const pageAlbum = document.getElementById('page-album');
+    const pageOther = document.getElementById('page-other');
+
+    // 肥皂按钮 & 底部回到顶部链接
+    const soapBtn = document.getElementById('soap-top-btn');
+
     let isDragging = false;
     let isMuted = false;
+    let albumGenerated = false;
 
     // ----- 点击音效播放函数 -----
     function playClickSound() {
         if (!clickSound) return;
         clickSound.currentTime = 0;
-        clickSound.play().catch(function(e) {
-            // 静默处理自动播放被阻止
-        });
+        clickSound.play().catch(function(e) {});
     }
 
-    // ----- 全局点击监听 - 任意点击都播放音效 -----
+    // ----- 全局点击监听 -----
     document.addEventListener('click', function(e) {
         playClickSound();
     });
-
-    // 也监听touch事件，移动端支持
     document.addEventListener('touchstart', function(e) {
         playClickSound();
     });
 
-    // ----- 播放器控件功能 (保留原有逻辑，不干扰全局点击) -----
+    // ----- 导航切换功能 -----
+    function switchPage(page) {
+        pageHome.style.display = 'none';
+        pageAlbum.style.display = 'none';
+        pageOther.style.display = 'none';
+        
+        navHome.style.textDecoration = 'none';
+        navHome.style.fontWeight = 'normal';
+        navAlbum.style.textDecoration = 'none';
+        navAlbum.style.fontWeight = 'normal';
+        navOther.style.textDecoration = 'none';
+        navOther.style.fontWeight = 'normal';
+        
+        if (page === 'home') {
+            pageHome.style.display = 'block';
+            navHome.style.textDecoration = 'underline';
+            navHome.style.fontWeight = 'bold';
+        } else if (page === 'album') {
+            pageAlbum.style.display = 'block';
+            navAlbum.style.textDecoration = 'underline';
+            navAlbum.style.fontWeight = 'bold';
+            generateAlbum();
+        } else if (page === 'other') {
+            pageOther.style.display = 'block';
+            navOther.style.textDecoration = 'underline';
+            navOther.style.fontWeight = 'bold';
+        }
+    }
+
+    // ----- 导航事件绑定 -----
+    navHome.addEventListener('click', function(e) {
+        e.preventDefault();
+        switchPage('home');
+    });
+    navAlbum.addEventListener('click', function(e) {
+        e.preventDefault();
+        switchPage('album');
+    });
+    navOther.addEventListener('click', function(e) {
+        e.preventDefault();
+        switchPage('other');
+    });
+
+    // ================================================================
+    // ★★★ 回到顶部功能（肥皂按钮 + 底部链接） ★★★
+    // ================================================================
+    function scrollToTop() {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    soapBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        scrollToTop();
+    });
+
+    // 滚动时显示/隐藏肥皂按钮
+    window.addEventListener('scroll', function() {
+        if (window.scrollY > 300) {
+            soapBtn.style.display = 'flex';
+        } else {
+            soapBtn.style.display = 'none';
+        }
+    });
+    // 初始检查
+    if (window.scrollY > 300) {
+        soapBtn.style.display = 'flex';
+    } else {
+        soapBtn.style.display = 'none';
+    }
+
+    // ================================================================
+    // ★★★ 相册配置 - 两张不同图片配对叠放 ★★★
+    // ================================================================
+    function generateAlbum() {
+        if (albumGenerated) return;
+        const grid = document.getElementById('albumGrid');
+        
+        const BASE_URL = 'https://cdn.jsdmirror.com/gh/MitteWolf/kirby/photos/';
+
+        // ★★★ 图片列表 ★★★
+        const imageList = [
+            '1.jpg',   // 与 2.jpg 配对
+            '2.jpg',   // 与 1.jpg 配对
+            '3.jpg',   // 与 4.jpg 配对
+            '4.jpg'    // 与 3.jpg 配对
+        ];
+
+        grid.innerHTML = '';
+
+        for (let i = 0; i < imageList.length; i += 2) {
+            const leftImg = imageList[i];
+            const rightImg = (i + 1 < imageList.length) ? imageList[i + 1] : imageList[i];
+
+            const leftTitle = leftImg.replace(/\.[^/.]+$/, '').replace(/[-_]/g, ' ');
+            const rightTitle = rightImg.replace(/\.[^/.]+$/, '').replace(/[-_]/g, ' ');
+
+            const frame = document.createElement('div');
+            frame.className = 'album-frame';
+
+            frame.innerHTML = `
+                <div class="album-polaroid album-polaroid-left">
+                    <img src="${BASE_URL}${leftImg}" alt="${leftTitle}" loading="lazy" onerror="this.alt='图片加载失败'" />
+                </div>
+                <div class="album-polaroid album-polaroid-right">
+                    <img src="${BASE_URL}${rightImg}" alt="${rightTitle}" loading="lazy" onerror="this.alt='图片加载失败'" />
+                </div>
+            `;
+
+            grid.appendChild(frame);
+        }
+
+        if (imageList.length === 0) {
+            grid.innerHTML = `<p style="width:100%; text-align:center; color:#7a6b5d; padding:40px 0; font-style:italic;">📭 相册为空，请在 imageList 中添加图片。</p>`;
+        }
+
+        albumGenerated = true;
+    }
+
+    // ----- 播放器功能 -----
     function formatTime(seconds) {
         if (isNaN(seconds) || !isFinite(seconds)) return '0:00';
         const m = Math.floor(seconds / 60);
