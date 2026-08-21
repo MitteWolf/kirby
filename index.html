@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link rel="icon" href="https://cdn.jsdmirror.com/gh/MitteWolf/kirby/icon.png" type="image/png">
+<link rel="apple-touch-icon" href="https://cdn.jsdmirror.com/gh/MitteWolf/kirby/icon.png">
+<link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+<title>卡比の梦幻世界</title>
+<style>
+/* 全局样式 + 背景 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+body {
+    background-image: url('https://cdn.jsdmirror.com/gh/MitteWolf/kirby/bg.jpg');
+    background-attachment: fixed;
+    background-repeat: repeat;
+    font-family: "VT323", "宋体", monospace;
+    cursor: url('https://cdn.jsdmirror.com/gh/MitteWolf/kirby/click.png'), auto;
+    min-height: 100vh;
+}
+
+/* ---------- 欢迎遮罩层 ---------- */
+#welcome-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 182, 193, 0.88);
+    backdrop-filter: blur(3px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    transition: opacity 0.6s ease;
+    cursor: url('https://cdn.jsdmirror.com/gh/MitteWolf/kirby/click.png'), auto;
+}
+#welcome-overlay.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+.welcome-box {
+    background: #FFE4EC;
+    padding: 40px 60px;
+    border-radius: 40px 12px 40px 12px;
+    box-shadow: 0 20px 40px rgba(216, 112, 147, 0.5);
+    text-align: center;
+    border: 3px solid #D87093;
+    max-width: 90%;
+}
+.welcome-box h1 {
+    font-size: 3.2rem;
+    color: #8B3A4A;
+    text-shadow: 3px 3px 0 #FFB6C9;
+    letter-spacing: 2px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+.welcome-box p {
+    font-size: 1.6rem;
+    color: #A05060;
+    background: rgba(255, 255, 255, 0.4);
+    padding: 12px 24px;
+    border-radius: 60px;
+    display: inline-block;
+    backdrop-filter: blur(2px);
+    border: 1px solid #D87093;
+}
+.welcome-box .hint {
+    margin-top: 30px;
+    font-size: 1.0rem;
+    color: #B06A7A;
+    letter-spacing: 4px;
+    border-top: 1px dashed #D87093;
+    padding-top: 18px;
+}
+@keyframes softPulse {
+    0% { opacity: 0.6; }
+    50% { opacity: 1; }
+    100% { opacity: 0.6; }
+}
+.welcome-box .hint span {
+    display: inline-block;
+    animation: softPulse 2s infinite;
+    font-weight: bold;
+    color: #B34B5E;
+}
+
+/* ---------- 复古播放器 (固定右下角) ---------- */
+#retro-player {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 9998;
+    background: #ffe3f2;
+    border: 3px ridge #ff4faa;
+    border-radius: 8px;
+    padding: 6px 16px 8px 16px;
+    box-shadow: 0 0 20px rgba(255, 79, 170, 0.4), inset 0 0 10px rgba(255, 79, 170, 0.1);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: "VT323", "Courier New", monospace;
+    white-space: nowrap;
+    height: 44px;
+    opacity: 0;
+    transform: scale(0.92);
+    pointer-events: none;
+    transition: opacity 0.5s ease, transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+#retro-player.visible {
+    opacity: 1;
+    transform: scale(1);
+    pointer-events: auto;
+}
+
+/* 播放器内各元素 */
+.player-title-mini {
+    font-size: 14px;
+    font-weight: bold;
+    color: #cc0066;
+    letter-spacing: 1px;
+    padding-right: 8px;
+    border-right: 2px solid #ff4faa;
+}
+.player-title-mini span {
+    animation: softPulse 2.5s infinite;
+}
+
+.player-controls-mini {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.ctrl-btn-mini {
+    background: #FFEEF2;
+    border: 2px outset #ff99cc;
+    border-radius: 4px;
+    width: 26px;
+    height: 26px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    color: #8B3A4A;
+    cursor: pointer;
+    transition: all 0.08s ease;
+    user-select: none;
+    font-family: "VT323", monospace;
+}
+.ctrl-btn-mini:active {
+    transform: scale(0.88);
+}
+.ctrl-btn-mini:hover {
+    background: #FFE4EC;
+}
+.ctrl-btn-mini.play-btn-mini {
+    width: 30px;
+    height: 30px;
+    font-size: 14px;
+    background: #ff88cc;
+    border-color: #cc0066;
+    color: #fff;
+}
+.ctrl-btn-mini.play-btn-mini:hover {
+    background: #ff66bb;
+}
+
+.progress-mini {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex: 1;
+    min-width: 120px;
+}
+.progress-time-mini {
+    font-size: 12px;
+    color: #8B3A4A;
+    min-width: 30px;
+    font-weight: bold;
+}
+.progress-track-mini {
+    flex: 1;
+    height: 6px;
+    background: #FFD9E6;
+    border-radius: 10px;
+    border: 1px solid #ff4faa;
+    position: relative;
+    cursor: pointer;
+    box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
+    min-width: 60px;
+}
+.progress-fill-mini {
+    width: 0%;
+    height: 100%;
+    background: #ff4faa;
+    border-radius: 10px;
+    transition: width 0.05s linear;
+    box-shadow: 0 0 6px rgba(255, 79, 170, 0.5);
+}
+.progress-thumb-mini {
+    position: absolute;
+    top: 50%;
+    left: 0%;
+    transform: translate(-50%, -50%);
+    width: 12px;
+    height: 12px;
+    background: radial-gradient(circle at 35% 35%, #ffb7d5, #ff4faa);
+    border-radius: 50%;
+    border: 2px solid #cc0066;
+    box-shadow: 0 0 6px rgba(255, 79, 170, 0.4);
+    transition: left 0.05s linear;
+    pointer-events: none;
+}
+
+.volume-mini {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    padding-left: 6px;
+    border-left: 2px solid #ff4faa;
+}
+.knob-mini {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 40% 35%, #ffb7d5, #ff4faa);
+    border: 2px solid #cc0066;
+    box-shadow: inset 0 -2px 3px rgba(0,0,0,0.15);
+    cursor: pointer;
+    transition: transform 0.1s;
+}
+.knob-mini:active {
+    transform: rotate(25deg);
+}
+.vol-label-mini {
+    font-size: 12px;
+    color: #8B3A4A;
+}
+
+/* 隐藏的 audio */
+#bg-music {
+    display: none;
+}
+#click-sound {
+    display: none;
+}
+
+/* 小屏适配 */
+@media (max-width: 768px) {
+    #retro-player {
+        bottom: 12px;
+        right: 12px;
+        flex-wrap: wrap;
+        height: auto;
+        padding: 6px 12px;
+        gap: 4px;
+        border-radius: 16px 4px 16px 4px;
+        max-width: calc(100% - 24px);
+    }
+    .progress-mini {
+        min-width: 80px;
+        flex-basis: 100%;
+        order: 10;
+    }
+    .progress-track-mini {
+        min-width: 40px;
+    }
+    .player-title-mini {
+        font-size: 10px;
+        padding-right: 4px;
+    }
+    .ctrl-btn-mini {
+        width: 22px;
+        height: 22px;
+        font-size: 10px;
+    }
+    .ctrl-btn-mini.play-btn-mini {
+        width: 26px;
+        height: 26px;
+        font-size: 12px;
+    }
+}
+
+@media (max-width: 480px) {
+    #retro-player {
+        bottom: 8px;
+        right: 8px;
+        padding: 4px 8px;
+        gap: 3px;
+        max-width: calc(100% - 16px);
+    }
+    .progress-mini {
+        min-width: 60px;
+        flex-basis: 100%;
+    }
+    .player-title-mini {
+        font-size: 9px;
+        padding-right: 3px;
+    }
+    .ctrl-btn-mini {
+        width: 20px;
+        height: 20px;
+        font-size: 9px;
+    }
+    .ctrl-btn-mini.play-btn-mini {
+        width: 24px;
+        height: 24px;
+        font-size: 11px;
+    }
+    .progress-time-mini {
+        font-size: 8px;
+        min-width: 24px;
+    }
+    .welcome-box {
+        padding: 20px 16px;
+    }
+    .welcome-box h1 {
+        font-size: 1.8rem;
+    }
+    .welcome-box p {
+        font-size: 1.0rem;
+        padding: 8px 16px;
+    }
+}
+
+/* ===== 主页面样式（神殿风格，保持透明度） ===== */
+.header-bg {
+    background-color: #ff88cc;
+}
+.header-bg td {
+    height: 80px;
+    text-align: center;
+}
+.header-title {
+    color: #FFFFFF;
+    font-size: 28px;
+    font-family: "VT323", "宋体", sans-serif;
+    font-weight: bold;
+    text-shadow: 2px 2px 0 #8b0044;
+}
+.header-sub {
+    color: #FFDDE1;
+    font-size: 13px;
+}
+.nav-bg {
+    background-color: #ffd6e8;
+}
+.nav-bg td {
+    height: 30px;
+}
+.nav-link {
+    color: #cc0066;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 15px;
+}
+.nav-link:hover {
+    color: #ff33cc;
+    text-decoration: underline;
+}
+.nav-sep {
+    background-color: #ff4faa;
+    width: 2%;
+}
+.marquee-bg {
+    background-color: #ffe3f2;
+}
+.marquee-bg td {
+    height: 26px;
+}
+.marquee-text {
+    color: #cc0066;
+    font-size: 14px;
+}
+.main-content {
+    background-color: #ffd6e8;
+    width: 70%;
+    padding: 20px 15px;
+    vertical-align: top;
+}
+.sidebar {
+    background-color: #ffe3f2;
+    width: 30%;
+    padding: 10px;
+    vertical-align: top;
+}
+.footer-bg {
+    background-color: #ff88cc;
+}
+.footer-bg td {
+    padding: 8px;
+    text-align: center;
+}
+.footer-text {
+    color: #FFDDE1;
+    font-size: 13px;
+    text-shadow: 1px 1px #8b0044;
+}
+.footer-small {
+    color: #FFB6C9;
+    font-size: 11px;
+}
+.footer-link {
+    color: #FFDDE1;
+}
+.footer-link:hover {
+    color: #FFFFFF;
+}
+table {
+    border-collapse: collapse;
+}
+a {
+    text-decoration: none;
+}
+
+/* 卡比自我介绍 + 右侧图片 容器 */
+.intro-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    align-items: flex-start;
+}
+.kirby-intro {
+    flex: 2;
+    min-width: 220px;
+    background: rgba(255, 240, 245, 0.8);
+    border: 2px dashed #D87093;
+    border-radius: 20px 4px 20px 4px;
+    padding: 15px 20px;
+    backdrop-filter: blur(1px);
+    font-size: 16px;
+    color: #5A3A4A;
+    line-height: 1.7;
+    box-shadow: 0 4px 12px rgba(216, 112, 147, 0.2);
+}
+.kirby-intro .poyo {
+    display: inline-block;
+    background: #D87093;
+    color: #FFF;
+    padding: 0 12px;
+    border-radius: 30px;
+    font-size: 14px;
+    margin-bottom: 6px;
+}
+.kirby-intro strong {
+    color: #B34B5E;
+}
+.kirby-intro .quote {
+    font-style: italic;
+    color: #8B3A4A;
+    border-left: 3px solid #ff4faa;
+    padding-left: 15px;
+    margin: 8px 0;
+}
+.kirby-side-img {
+    flex: 1;
+    min-width: 120px;
+    max-width: 330px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.kirby-side-img img {
+    width: 100%;
+    height: auto;
+    border-radius: 30px 4px 30px 4px;
+    border: 3px solid #ff88cc;
+    box-shadow: 0 8px 18px rgba(216, 112, 147, 0.3);
+    transition: transform 0.2s ease;
+    display: block;
+}
+.kirby-side-img img:hover {
+    transform: scale(1.02);
+}
+@media (max-width: 600px) {
+    .intro-wrapper {
+        flex-direction: column;
+        align-items: center;
+    }
+    .kirby-side-img {
+        max-width: 160px;
+    }
+}
+</style>
+</head>
+<body>
+
+<!-- ===== 欢迎遮罩层 ===== -->
+<div id="welcome-overlay">
+    <div class="welcome-box">
+        <h1>poyo~</h1>
+        <p>这里是卡比の梦幻世界</p>
+        <div class="hint">
+            <span>✦ 点击网页任意处继续 ✦</span>
+        </div>
+    </div>
+</div>
+
+<!-- ===== 复古播放器 (固定右下角) ===== -->
+<div id="retro-player">
+    <span class="player-title-mini"><span>♪</span> 音乐</span>
+    
+    <div class="player-controls-mini">
+        <div class="ctrl-btn-mini" id="rewind-btn" title="快退10秒">◀</div>
+        <div class="ctrl-btn-mini play-btn-mini" id="play-btn">▶</div>
+        <div class="ctrl-btn-mini" id="forward-btn" title="快进10秒">▶</div>
+    </div>
+    
+    <div class="progress-mini">
+        <span class="progress-time-mini" id="current-time">0:00</span>
+        <div class="progress-track-mini" id="progress-track">
+            <div class="progress-fill-mini" id="progress-fill"></div>
+            <div class="progress-thumb-mini" id="progress-thumb"></div>
+        </div>
+        <span class="progress-time-mini" id="duration-time">0:00</span>
+    </div>
+    
+    <div class="volume-mini">
+        <div class="knob-mini" id="volume-knob" title="点击切换静音"></div>
+        <span class="vol-label-mini" id="vol-label">🔊</span>
+    </div>
+</div>
+
+<!-- ===== 主页面 ===== -->
+<table class="main-table" width="100%" border="0" align="center" cellpadding="0" cellspacing="0" bgcolor="#FFF0F5" style="opacity:0.92;">
+<tr>
+<td>
+
+<!-- ===== 头部 ===== -->
+<table width="100%" border="0" cellpadding="0" cellspacing="0" bgcolor="#D87093">
+<tr>
+    <td height="80" align="center">
+        <font color="#FFFFFF" size="6" face="VT323, 宋体">
+            <b>Hi☆</b>
+        </font>
+        <br>
+        <font color="#FFDDE1" size="2">—— 这里是卡比の梦幻世界 ——</font>
+    </td>
+</tr>
+</table>
+
+<!-- ===== 导航栏 (删除了 日志、留言板、关于，添加了“其他”) ===== -->
+<table width="100%" border="0" cellpadding="0" cellspacing="0" bgcolor="#FFD9E6">
+<tr align="center">
+    <td height="30" width="20%"><b><a href="#" style="color:#cc0066;">首页</a></b></td>
+    <td width="2%" bgcolor="#ff4faa">|</td>
+    <td width="20%"><a href="#" style="color:#cc0066;">相册</a></td>
+    <td width="2%" bgcolor="#ff4faa">|</td>
+    <td width="20%"><a href="#" style="color:#cc0066;">其他</a></td>
+</tr>
+</table>
+
+<!-- ===== 滚动公告 ===== -->
+<table width="100%" border="0" cellpadding="0" cellspacing="0" bgcolor="#FFE4EC">
+<tr>
+    <td height="26">
+        <marquee scrollamount="3" behavior="scroll" onmouseover="this.stop()" onmouseout="this.start()">
+            <font color="#cc0066" size="2">poyo☆来这休息几分钟再走吧。不要害怕，卡比会在这陪你❤</font>
+        </marquee>
+    </td>
+</tr>
+</table>
+
+<!-- ===== 主体两栏 ===== -->
+<table width="100%" border="0" cellpadding="10" cellspacing="0">
+<tr valign="top">
+    <td width="70%" bgcolor="#ffd6e8" class="main-content">
+        <!-- 来自卡比的介绍 + 右侧图片 (flex容器) -->
+        <div class="intro-wrapper">
+            <div class="kirby-intro">
+                <div class="poyo">来自卡比的介绍</div>
+                <p><strong>poyo✨我是卡比！</strong></p>
+                <p>我是住在<strong>波普星✨（Pop Star）</strong>上<strong>噗噗噗之国（Dream Land）</strong>的粉色小家伙，身高大约20厘米。虽然看起来圆滚滚的，但我可是这片星球的<strong>守护者</strong>哦！</p>
+                <p>我的招牌能力是<strong>吸入</strong>：可以把敌人或物品整个吸进嘴里，然后通过<strong>复制能力</strong>获得他们的力量——从喷火、挥剑到射针、变伞，我能用超过<strong>30种</strong>不同的能力战斗。而且我还能吸满空气，像气球一样飘起来飞行！</p>
+                <div class="quote">“可怕的梦，让我们吃掉它吧。”</div>
+                <p>我最大的爱好就是<strong>吃</strong>——尤其是草莓小蛋糕、番茄和西瓜！吃饱了就喜欢睡个长长的午觉。虽然有时候会被敌人叫做“粉红恶魔”，但我永远是噗噗噗之国最可靠的伙伴。只要有人需要帮助，我一定会赶过去！</p>
+                <p style="font-size:14px; color:#8B3A4A; margin-top:8px;">—— 随时欢迎你来波普星玩，poyo！✨</p>
+            </div>
+            <div class="kirby-side-img">
+                <img src="https://cdn.jsdmirror.com/gh/MitteWolf/kirby/kirby.jpg" alt="卡比插图" loading="lazy">
+            </div>
+        </div>
+        &nbsp;
+    </td>
+</tr>
+</table>
+
+<!-- ===== 底部 ===== -->
+<table width="100%" border="0" cellpadding="8" cellspacing="0" bgcolor="#D87093">
+<tr>
+    <td align="center">
+        <font color="#FFDDE1" size="2">
+            Copyright © 2009 MT的个人主页 &nbsp;|&nbsp; 
+            <a href="#"><font color="#FFDDE1">回到顶部</font></a>
+            <br>
+        </font>
+    </td>
+</tr>
+</table>
+
+</td>
+</tr>
+</table>
+
+<!-- ===== 隐藏的音频元素 ===== -->
+<audio id="bg-music" loop preload="auto">
+    <source src="https://cdn.jsdmirror.com/gh/MitteWolf/kirby/music.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+</audio>
+
+<!-- ===== 点击音效 ===== -->
+<audio id="click-sound" preload="auto">
+    <source src="https://cdn.jsdmirror.com/gh/MitteWolf/kirby/poyo.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+</audio>
+
+<script>
+(function() {
+    // ----- DOM 引用 -----
+    const overlay = document.getElementById('welcome-overlay');
+    const player = document.getElementById('retro-player');
+    const audio = document.getElementById('bg-music');
+    const clickSound = document.getElementById('click-sound');
+    const playBtn = document.getElementById('play-btn');
+    const rewindBtn = document.getElementById('rewind-btn');
+    const forwardBtn = document.getElementById('forward-btn');
+    const progressFill = document.getElementById('progress-fill');
+    const progressThumb = document.getElementById('progress-thumb');
+    const progressTrack = document.getElementById('progress-track');
+    const currentTimeEl = document.getElementById('current-time');
+    const durationTimeEl = document.getElementById('duration-time');
+    const volumeKnob = document.getElementById('volume-knob');
+    const volLabel = document.getElementById('vol-label');
+
+    let isDragging = false;
+    let isMuted = false;
+
+    // ----- 点击音效播放函数 -----
+    function playClickSound() {
+        if (!clickSound) return;
+        clickSound.currentTime = 0;
+        clickSound.play().catch(function(e) {
+            // 静默处理自动播放被阻止
+        });
+    }
+
+    // ----- 全局点击监听 - 任意点击都播放音效 -----
+    document.addEventListener('click', function(e) {
+        playClickSound();
+    });
+
+    // 也监听touch事件，移动端支持
+    document.addEventListener('touchstart', function(e) {
+        playClickSound();
+    });
+
+    // ----- 播放器控件功能 (保留原有逻辑，不干扰全局点击) -----
+    function formatTime(seconds) {
+        if (isNaN(seconds) || !isFinite(seconds)) return '0:00';
+        const m = Math.floor(seconds / 60);
+        const s = Math.floor(seconds % 60);
+        return m + ':' + (s < 10 ? '0' : '') + s;
+    }
+
+    function updateProgress() {
+        if (!audio || isNaN(audio.duration) || audio.duration === Infinity) return;
+        const pct = (audio.currentTime / audio.duration) * 100;
+        progressFill.style.width = pct + '%';
+        progressThumb.style.left = pct + '%';
+        currentTimeEl.textContent = formatTime(audio.currentTime);
+    }
+
+    function updateDuration() {
+        if (!audio || isNaN(audio.duration) || audio.duration === Infinity) return;
+        durationTimeEl.textContent = formatTime(audio.duration);
+    }
+
+    function togglePlay() {
+        if (audio.paused) {
+            audio.play().catch(e => console.warn('播放失败:', e));
+        } else {
+            audio.pause();
+        }
+        updatePlayButton();
+    }
+
+    function updatePlayButton() {
+        if (!audio) return;
+        if (audio.paused) {
+            playBtn.textContent = '▶';
+        } else {
+            playBtn.textContent = '⏸';
+        }
+    }
+
+    function seek(offset) {
+        if (!audio || isNaN(audio.duration)) return;
+        let newTime = audio.currentTime + offset;
+        if (newTime < 0) newTime = 0;
+        if (newTime > audio.duration) newTime = audio.duration;
+        audio.currentTime = newTime;
+        updateProgress();
+    }
+
+    function toggleMute() {
+        if (audio) {
+            audio.muted = !audio.muted;
+            isMuted = audio.muted;
+            volLabel.textContent = isMuted ? '🔇' : '🔊';
+        }
+    }
+
+    // ----- 播放器控件事件绑定 -----
+    playBtn.addEventListener('click', function(e) {
+        e.stopPropagation(); 
+        togglePlay();
+    });
+
+    rewindBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        seek(-10);
+    });
+
+    forwardBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        seek(10);
+    });
+
+    progressTrack.addEventListener('click', function(e) {
+        e.stopPropagation();
+        if (!audio || isNaN(audio.duration)) return;
+        const rect = this.getBoundingClientRect();
+        const pct = Math.min(1, Math.max(0, (e.clientX - rect.left) / rect.width));
+        audio.currentTime = pct * audio.duration;
+        updateProgress();
+    });
+
+    progressTrack.addEventListener('mousedown', function(e) {
+        e.stopPropagation();
+        isDragging = true;
+        const rect = this.getBoundingClientRect();
+        const pct = Math.min(1, Math.max(0, (e.clientX - rect.left) / rect.width));
+        if (audio && !isNaN(audio.duration)) {
+            audio.currentTime = pct * audio.duration;
+            updateProgress();
+        }
+    });
+
+    document.addEventListener('mousemove', function(e) {
+        if (!isDragging || !audio) return;
+        const rect = progressTrack.getBoundingClientRect();
+        let pct = Math.min(1, Math.max(0, (e.clientX - rect.left) / rect.width));
+        audio.currentTime = pct * audio.duration;
+        updateProgress();
+    });
+
+    document.addEventListener('mouseup', function() {
+        isDragging = false;
+    });
+
+    volumeKnob.addEventListener('click', function(e) {
+        e.stopPropagation();
+        toggleMute();
+    });
+
+    audio.addEventListener('timeupdate', function() {
+        if (!isDragging) {
+            updateProgress();
+        }
+    });
+
+    audio.addEventListener('loadedmetadata', function() {
+        updateDuration();
+        updateProgress();
+    });
+
+    audio.addEventListener('play', updatePlayButton);
+    audio.addEventListener('pause', updatePlayButton);
+    audio.addEventListener('ended', updatePlayButton);
+
+    updatePlayButton();
+    if (audio.readyState >= 1) {
+        updateDuration();
+        updateProgress();
+    }
+
+    // ----- 欢迎页逻辑 -----
+    function showPlayer() {
+        if (player) {
+            player.classList.add('visible');
+        }
+        if (audio) {
+            audio.play().catch(e => {
+                console.log('自动播放被阻止，等待用户操作');
+            });
+        }
+        setTimeout(function() {
+            updateDuration();
+            updateProgress();
+        }, 300);
+    }
+
+    function dismissWelcome(e) {
+        if (overlay) {
+            overlay.classList.add('hidden');
+            document.removeEventListener('click', dismissWelcome);
+            document.removeEventListener('touchstart', dismissWelcome);
+            document.removeEventListener('keydown', dismissWelcome);
+            showPlayer();
+        }
+    }
+
+    document.addEventListener('click', dismissWelcome);
+    document.addEventListener('touchstart', dismissWelcome);
+    document.addEventListener('keydown', function(e) {
+        if (overlay && !overlay.classList.contains('hidden')) {
+            dismissWelcome(e);
+        }
+    });
+
+    // ---------- 标签页切换检测 ----------
+    const originalTitle = document.title;
+
+    function handleVisibilityChange() {
+        if (document.hidden) {
+            document.title = 'poyo~快回来啊qwq';
+        } else {
+            document.title = originalTitle;
+        }
+    }
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+
+    window.addEventListener('beforeunload', function() {
+        document.title = originalTitle;
+    });
+
+    console.log('✨ 卡比梦幻世界已加载，每次点击都有poyo~音效！');
+})();
+</script>
+
+</body>
+</html>
