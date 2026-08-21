@@ -16,7 +16,9 @@
 body {
     background-image: url('https://cdn.jsdmirror.com/gh/MitteWolf/kirby/bg.jpg');
     background-attachment: fixed;
-    background-repeat: repeat;
+    background-repeat: no-repeat;          /* 改为不重复 */
+    background-size: cover;               /* 背景图覆盖整个屏幕，保持比例 */
+    background-position: center center;   /* 居中显示 */
     font-family: "VT323", "宋体", monospace;
     cursor: url('https://cdn.jsdmirror.com/gh/MitteWolf/kirby/click.png'), auto;
     min-height: 100vh;
