@@ -20,8 +20,15 @@ body {
     background-size: cover;
     background-position: center center;
     font-family: "VT323", "宋体", monospace;
+    /* 鼠标指针：统一使用自定义光标，移动端会降级为系统默认，但保留样式 */
     cursor: url('https://cdn.jsdmirror.com/gh/MitteWolf/kirby/click.png'), auto;
     min-height: 100vh;
+}
+/* 移动端触摸时保留视觉反馈，但光标无法自定义，使用默认 */
+@media (hover: none) {
+    body {
+        cursor: auto; /* 移动端无自定义光标，但背景和交互不受影响 */
+    }
 }
 
 /* ---------- 欢迎遮罩层 ---------- */
@@ -571,12 +578,12 @@ a {
     position: relative;
 }
 
-/* 拍立得照片样式 */
+/* 拍立得照片样式 - 不透明背景，完全实心 */
 .album-polaroid {
     position: absolute;
     width: 82%;
     max-width: 220px;
-    background: #f5ede4;
+    background: #f5ede4;  /* 实心背景，无透明 */
     padding: 10px 10px 14px 10px;
     border-radius: 4px;
     box-shadow: 0 12px 30px rgba(80,50,30,0.25), 0 4px 12px rgba(60,40,20,0.15);
@@ -587,6 +594,9 @@ a {
     flex-direction: column;
     align-items: center;
     border: 1px solid #ded3c4;
+    /* 确保完全不透明 */
+    opacity: 1;
+    background-color: #f5ede4; 
 }
 .album-polaroid img {
     width: 100%;
@@ -594,7 +604,6 @@ a {
     object-fit: cover;
     border-radius: 3px;
     display: block;
-    filter: none
     background: #d4c8b8;
     border: 1px solid #d0c0ae;
 }
@@ -709,7 +718,6 @@ a {
     justify-content: center;
     backdrop-filter: blur(2px);
     border: 2px solid #ffe0f0;
-}
 }
 #soap-top-btn:hover {
     transform: translateY(-3px);
@@ -1396,6 +1404,7 @@ a {
         if (player) {
             player.classList.add('visible');
         }
+        // 播放器显示后自动播放背景音乐
         if (audio) {
             audio.play().catch(e => {
                 console.log('自动播放被阻止，等待用户操作');
